@@ -596,16 +596,16 @@
           <span class="step">Part 1 · before</span>
           <h3>Before you look around</h3>
           <p>Five questions on what you already think about in-game spending. There are no right or wrong answers — one is a guess, and nobody expects you to know it.</p>
-          <!-- Replace the href below with your Part 1 Google Form link -->
-          <a class="btn primary js-form" href="#" data-form="part 1">Open Part 1</a>
+          <!-- Part 1 — Microsoft Forms (before viewing) -->
+          <a class="btn primary js-form" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=ijFvLhPxZUyKRwXd1fM3mAPhvsfmQMtDl2V6fVkklYtUQTU0R0hISkI5SzREUDhGVlVNUlZHR0kwTi4u" target="_blank" rel="noopener">Open Part 1</a>
         </article>
 
         <article class="survey-card reveal">
           <span class="step">Part 2 · after</span>
           <h3>After you’ve read the site</h3>
           <p>The same five questions, plus what you made of the project. Please answer as you feel now, not as you answered before.</p>
-          <!-- Replace the href below with your Part 2 Google Form link -->
-          <a class="btn ghost js-form" href="#" data-form="part 2">Open Part 2</a>
+          <!-- Part 2 — Microsoft Forms (after viewing) -->
+          <a class="btn ghost js-form" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=ijFvLhPxZUyKRwXd1fM3mAPhvsfmQMtDl2V6fVkklYtURDNMQzNaUFpaMEZROFRZSlhZM0JENk5HQy4u" target="_blank" rel="noopener">Open Part 2</a>
         </article>
       </div>
       <p class="micro form-note" id="formNote" hidden></p>
@@ -817,7 +817,7 @@
     paintCount();
   }
 
-  /* ---------- survey placeholder links ---------- */
+  /* ---------- survey links (safety net: both forms are wired to Microsoft Forms) ---------- */
   var formNote = document.getElementById("formNote");
   document.querySelectorAll(".js-form").forEach(function (link) {
     link.addEventListener("click", function (event) {
@@ -826,7 +826,7 @@
         event.preventDefault();
         if (formNote) {
           formNote.hidden = false;
-          formNote.textContent = "Our " + link.getAttribute("data-form") + " form is being finalised and will open from here on launch day. Thank you for volunteering.";
+          formNote.textContent = "This survey link has not been connected yet — the form opens here on launch day.";
         }
       }
     });
