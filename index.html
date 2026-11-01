@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Level Up, Wallet Down — Video-game overspending and student wellbeing</title>
+<meta name="description" content="A YCIS student project on video-game overspending: what it costs Hong Kong students, why the games are built that way, and five ways to take your money back." />
+<meta name="theme-color" content="#05070d" />
+<meta property="og:title" content="Level Up, Wallet Down" />
+<meta property="og:description" content="Microtransactions are designed to feel like nothing. Your allowance isn't." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2305070d'/%3E%3Cpath d='M8 12h16v8a3 3 0 0 1-3 3h-3l-2-2h-2l-2 2H11a3 3 0 0 1-3-3z' fill='%233ee8d2'/%3E%3Ccircle cx='23' cy='15' r='1.6' fill='%2305070d'/%3E%3C/svg%3E" />
+<style>
+  :root{
+    --bg:#05070d;
+    --bg-2:#080c15;
+    --panel:#0c121e;
+    --panel-2:#101829;
+    --line:rgba(255,255,255,.08);
+    --line-strong:rgba(255,255,255,.16);
+    --text:#e9eff8;
+    --muted:#95a3ba;
+    --cyan:#3ee8d2;
+    --violet:#9b8cff;
+    --amber:#ffc46b;
+    --pink:#ff8fa8;
+    --maxw:1120px;
+    --radius:18px;
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img,svg{max-width:100%;display:block}
+  a{color:var(--cyan);text-decoration:none}
+  a:hover{text-decoration:underline;text-underline-offset:3px}
+  h1,h2,h3{line-height:1.1;letter-spacing:-.025em;margin:0 0 .5em}
+  h1{font-size:clamp(2.6rem,8.5vw,5.2rem);font-weight:800}
+  h1 .g{background:linear-gradient(115deg,var(--cyan) 8%,#7fe9ff 46%,var(--violet) 94%);
+        -webkit-background-clip:text;background-clip:text;color:transparent}
+  h2{font-size:clamp(1.8rem,4vw,2.7rem);font-weight:750}
+  h3{font-size:1.12rem;font-weight:650;letter-spacing:-.01em}
+  p{margin:0 0 1.05em}
+  .wrap{width:min(var(--maxw),calc(100% - 2.5rem));margin-inline:auto}
+  .mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+
+  .skip{position:absolute;left:-999px;top:0;background:var(--cyan);color:#04110f;padding:.6rem 1rem;z-index:100;border-radius:0 0 10px 0}
+  .skip:focus{left:0}
+
+  /* ---------- nav ---------- */
+  .nav{position:sticky;top:0;z-index:40;background:rgba(5,7,13,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;gap:1.5rem;height:64px}
+  .brand{display:flex;align-items:center;gap:.6rem;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+  .brand:hover{text-decoration:none}
+  .brand-dot{width:26px;height:26px;border-radius:8px;background:linear-gradient(140deg,var(--cyan),var(--violet));box-shadow:0 0 22px rgba(62,232,210,.35)}
+  .nav-links{display:flex;gap:1.35rem;margin-left:auto;font-size:.9rem}
+  .nav-links a{color:var(--muted)}
+  .nav-links a:hover{color:var(--text);text-decoration:none}
+  .nav-cta{margin-left:.4rem}
+  @media (max-width:840px){.nav-links{display:none}}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+    padding:.78rem 1.25rem;border-radius:999px;font-weight:650;font-size:.94rem;
+    border:1px solid transparent;cursor:pointer;transition:transform .2s var(--ease),background .2s,border-color .2s;
+  }
+  .btn:hover{text-decoration:none;transform:translateY(-1px)}
+  .btn.primary{background:linear-gradient(135deg,var(--cyan),#57d7ff);color:#04201c;box-shadow:0 10px 30px -12px rgba(62,232,210,.7)}
+  .btn.ghost{border-color:var(--line-strong);color:var(--text);background:rgba(255,255,255,.02)}
+  .btn.small{padding:.5rem .95rem;font-size:.85rem}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding:clamp(3.5rem,9vw,7rem) 0 clamp(2.5rem,6vw,4.5rem);overflow:hidden}
+  .hero::before{
+    content:"";position:absolute;inset:-20% -10% auto;height:120%;
+    background:
+      radial-gradient(48% 52% at 18% 8%,rgba(62,232,210,.16),transparent 62%),
+      radial-gradient(42% 46% at 88% 2%,rgba(155,140,255,.18),transparent 60%),
+      radial-gradient(60% 40% at 50% 90%,rgba(255,143,168,.07),transparent 70%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;max-width:840px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:.55rem;
+    font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:.4rem .85rem;margin-bottom:1.6rem;
+    background:rgba(255,255,255,.02);
+  }
+  .eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+  .lede{font-size:clamp(1.05rem,2.1vw,1.3rem);color:#cdd8ea;max-width:36ch;margin-bottom:.9em}
+  .sub{color:var(--muted);max-width:52ch}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.9rem}
+
+  .hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-top:clamp(2.5rem,5vw,3.6rem)}
+  @media (max-width:600px){
+    .hero-stats{grid-template-columns:1fr}
+    .hero-actions .btn{width:100%}
+  }
+  .mini-stat{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid var(--line);border-radius:var(--radius);padding:1.15rem 1.25rem}
+  .mini-stat .val{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:2rem;font-weight:700;color:var(--cyan);font-variant-numeric:tabular-nums;line-height:1}
+  .mini-stat .cap{font-size:.82rem;color:var(--muted);margin-top:.4rem}
+
+  /* ---------- sections ---------- */
+  section{padding:clamp(3.2rem,7vw,5.5rem) 0}
+  .section-head{max-width:60ch;margin-bottom:2.2rem}
+  .section-head .kicker{
+    font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);
+    display:block;margin-bottom:.75rem;font-weight:600;
+  }
+  .section-head p{color:var(--muted);margin-bottom:0}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line-strong),transparent)}
+
+  /* issue */
+  .issue-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:2.5rem;align-items:start}
+  @media (max-width:860px){.issue-grid{grid-template-columns:1fr;gap:1.8rem}}
+  .issue-copy p{color:#c7d3e6;font-size:1.03rem}
+  .pull{
+    border-left:2px solid var(--cyan);padding:.35rem 0 .35rem 1.15rem;margin:1.6rem 0;
+    color:#dbe5f4;font-size:1.08rem;font-style:italic;letter-spacing:-.01em;
+  }
+  .case-card{background:linear-gradient(180deg,rgba(255,143,168,.07),rgba(255,255,255,.012));border:1px solid rgba(255,143,168,.22);border-radius:var(--radius);padding:1.4rem}
+  .case-card .tag{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);font-weight:650}
+  .case-card p{font-size:.95rem;color:#d6dfee;margin:.7rem 0 0}
+  .case-card p:last-child{margin-bottom:0}
+  .case-card .source{font-size:.76rem;color:var(--muted);margin-top:.9rem}
+
+  /* data */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem}
+  .stat-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.35rem 1.4rem;transition:border-color .25s,transform .25s var(--ease)}
+  .stat-card:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+  .stat-card .num{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:2.6rem;font-weight:700;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;
+    background:linear-gradient(120deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat-card .lbl{margin-top:.65rem;font-weight:600;font-size:.98rem}
+  .stat-card .note{margin-top:.35rem;font-size:.83rem;color:var(--muted)}
+
+  .chart{margin-top:2.2rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem}
+  .chart h3{margin-bottom:1.2rem;color:#dbe5f4}
+  .chart-row{margin-bottom:1.05rem}
+  .chart-row:last-child{margin-bottom:0}
+  .chart-label{display:flex;justify-content:space-between;font-size:.88rem;color:#c3cfe1;margin-bottom:.4rem}
+  .chart-label .mono{color:var(--cyan);font-weight:700}
+  .chart-track{height:9px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+  .bar-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--violet));transition:width 1.15s var(--ease)}
+  .chart-row.in .bar-fill{width:var(--w)}
+  .chart-src{font-size:.76rem;color:var(--muted);margin-top:1.15rem}
+
+  .council-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-top:1.2rem}
+  .council-item{background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:1.05rem 1.15rem}
+  .council-item strong{display:block;font-family:ui-monospace,Menlo,monospace;font-size:1.55rem;color:var(--amber);line-height:1.1;font-variant-numeric:tabular-nums}
+  .council-item span{font-size:.82rem;color:var(--muted);display:block;margin-top:.3rem}
+
+  /* why */
+  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem}
+  .why-card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem;overflow:hidden;transition:border-color .25s,background .25s}
+  .why-card:hover{border-color:var(--line-strong);background:var(--panel-2)}
+  .why-card .idx{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--violet);letter-spacing:.08em}
+  .why-card h3{margin:.55rem 0 .45rem}
+  .why-card p{font-size:.92rem;color:var(--muted);margin:0}
+  .why-card .does{display:block;margin-top:.85rem;font-size:.83rem;color:#c9d5e8;border-top:1px solid var(--line);padding-top:.75rem}
+  .why-card .does b{color:var(--cyan);font-weight:600}
+
+  /* wellbeing */
+  .well-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.4rem}
+  @media (max-width:760px){.well-grid{grid-template-columns:1fr}}
+  .well-card{background:linear-gradient(180deg,rgba(155,140,255,.09),rgba(255,255,255,.012));border:1px solid rgba(155,140,255,.24);border-radius:var(--radius);padding:1.5rem}
+  .well-card .num{font-family:ui-monospace,Menlo,monospace;font-size:3rem;font-weight:700;line-height:1;color:#cdc3ff;font-variant-numeric:tabular-nums}
+  .well-card p{margin:.7rem 0 0;color:#cbd6e8;font-size:.95rem}
+  .callout{display:flex;gap:1rem;align-items:flex-start;background:rgba(255,196,107,.06);border:1px solid rgba(255,196,107,.28);border-radius:var(--radius);padding:1.25rem 1.4rem}
+  .callout .icon{flex:0 0 auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(255,196,107,.14);color:var(--amber);font-weight:700}
+  .callout p{margin:0;font-size:.92rem;color:#e3d8c6}
+  .callout strong{color:#ffe2b0}
+
+  /* act */
+  .act-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:2rem;align-items:start}
+  @media (max-width:900px){.act-layout{grid-template-columns:1fr}}
+  .method{display:flex;gap:1rem;padding:1.05rem 0;border-bottom:1px solid var(--line)}
+  .method:last-child{border-bottom:0}
+  .method .n{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(62,232,210,.12);color:var(--cyan);display:grid;place-items:center;font-family:ui-monospace,Menlo,monospace;font-size:.8rem;font-weight:700}
+  .method h3{margin:0 0 .2rem;font-size:1rem}
+  .method p{margin:0;font-size:.9rem;color:var(--muted)}
+
+  .calc{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem;position:sticky;top:84px}
+  .calc h3{margin-bottom:.25rem}
+  .calc .hint{font-size:.85rem;color:var(--muted);margin-bottom:1.2rem}
+  .field{margin-bottom:.9rem}
+  .field label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:.35rem}
+  .field .input-wrap{display:flex;align-items:center;gap:.5rem;background:#070c16;border:1px solid var(--line-strong);border-radius:11px;padding:.6rem .8rem;transition:border-color .2s}
+  .field .input-wrap:focus-within{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(62,232,210,.13)}
+  .field .input-wrap span{color:var(--muted);font-size:.9rem}
+  .field input{width:100%;background:none;border:0;color:var(--text);font:inherit;font-family:ui-monospace,Menlo,monospace;font-size:1rem;outline:none}
+  .calc-out{margin-top:1.1rem;border-top:1px solid var(--line);padding-top:1.1rem}
+  .calc-out .big{font-family:ui-monospace,Menlo,monospace;font-size:2.1rem;font-weight:700;line-height:1;color:var(--cyan);font-variant-numeric:tabular-nums}
+  .calc-out .big-label{font-size:.82rem;color:var(--muted);margin-top:.3rem}
+  .verdict{font-size:.9rem;margin-top:1rem;padding:.75rem .9rem;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+  .verdict[data-level="ok"]{border-color:rgba(62,232,210,.35);background:rgba(62,232,210,.07);color:#c8fff4}
+  .verdict[data-level="watch"]{border-color:rgba(255,196,107,.35);background:rgba(255,196,107,.07);color:#ffe7bd}
+  .verdict[data-level="high"]{border-color:rgba(255,143,168,.4);background:rgba(255,143,168,.08);color:#ffd5de}
+  .equiv{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:.45rem;font-size:.86rem;color:var(--muted)}
+  .equiv li{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px dashed rgba(255,255,255,.07);padding-bottom:.35rem}
+  .equiv li b{color:#d9e3f3;font-family:ui-monospace,Menlo,monospace;font-weight:600}
+
+  /* pledge */
+  .pledge{background:linear-gradient(160deg,rgba(62,232,210,.045),rgba(155,140,255,.05));border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem}
+  .pledge-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+  .pledge-head h3{margin:0}
+  .pledge-head .count{font-family:ui-monospace,Menlo,monospace;font-size:.85rem;color:var(--cyan)}
+  .check{display:flex;gap:.8rem;align-items:flex-start;padding:.7rem .2rem;border-bottom:1px solid var(--line);cursor:pointer;transition:color .2s}
+  .check:last-child{border-bottom:0}
+  .check input{appearance:none;width:20px;height:20px;flex:0 0 auto;margin-top:.15rem;border-radius:6px;border:1.5px solid var(--line-strong);background:#070c16;cursor:pointer;transition:.2s var(--ease);position:relative}
+  .check input:checked{background:var(--cyan);border-color:var(--cyan)}
+  .check input:checked::after{content:"";position:absolute;left:5px;top:2px;width:5px;height:10px;border:solid #04201c;border-width:0 2px 2px 0;transform:rotate(42deg)}
+  .check input:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+  .check span{font-size:.93rem;color:#cfdaea}
+  .check input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.28)}
+  .pledge .micro{font-size:.76rem;color:var(--muted);margin:1rem 0 0}
+
+  /* survey */
+  .survey-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media (max-width:760px){.survey-grid{grid-template-columns:1fr}}
+  .survey-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;display:flex;flex-direction:column;gap:.7rem;transition:border-color .25s,transform .25s var(--ease)}
+  .survey-card:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+  .survey-card .step{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:650}
+  .survey-card h3{margin:0}
+  .survey-card p{font-size:.9rem;color:var(--muted);margin:0 0 .4rem}
+  .survey-card .btn{margin-top:auto;align-self:flex-start}
+  .micro{font-size:.78rem;color:var(--muted)}
+  .form-note{margin-top:1rem}
+
+  /* sources */
+  .sources ol{padding-left:1.2rem;color:var(--muted);font-size:.9rem}
+  .sources li{margin-bottom:.7rem}
+  .sources a{color:#9fe9df}
+  .sources .note{margin-top:1.2rem;font-size:.8rem;color:#7d8ba1;max-width:70ch}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:2.2rem 0 2.6rem;color:var(--muted);font-size:.85rem}
+  .foot-inner{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:flex-start}
+  .foot-brand{display:flex;align-items:center;gap:.6rem;color:var(--text);font-weight:650}
+  footer .fine{font-size:.78rem;color:#6f7d92;margin-top:.8rem;max-width:46ch}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal:nth-child(2){transition-delay:.05s}
+  .reveal:nth-child(3){transition-delay:.1s}
+  .reveal:nth-child(4){transition-delay:.15s}
+  .reveal:nth-child(5){transition-delay:.2s}
+  .reveal:nth-child(6){transition-delay:.25s}
+
+  /* no native spinners in the calculator fields */
+  .field input[type=number]::-webkit-outer-spin-button,
+  .field input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .field input[type=number]{-moz-appearance:textfield;appearance:textfield}
+
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    .bar-fill{transition:none}
+    .btn:hover,.stat-card:hover,.survey-card:hover{transform:none}
+  }
+
+  /* Save-as-PDF / printing: show everything, drop the dark canvas */
+  @media print{
+    :root{
+      --bg:#ffffff;--text:#111111;--muted:#444444;--panel:#ffffff;--panel-2:#ffffff;
+      --line:#cccccc;--line-strong:#999999;
+    }
+    body{background:#fff;color:#111}
+    .nav,.hero::before,.skip{display:none}
+    .reveal{opacity:1!important;transform:none!important}
+    .bar-fill{width:var(--w)!important;background:#333!important}
+    .stat-card .num,.mini-stat .val,.well-card .num,.calc-out .big{
+      background:none!important;-webkit-text-fill-color:#111!important;color:#111!important;
+    }
+    h1 .g{background:none!important;-webkit-text-fill-color:#111!important;color:#111!important}
+    .brand-dot{background:#333!important;box-shadow:none!important}
+    section{padding:1.2rem 0;break-inside:avoid}
+    a{color:#111;text-decoration:underline}
+  }
+</style>
+<noscript><style>.reveal{opacity:1;transform:none}.bar-fill{width:var(--w)}</style></noscript>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span> Level Up, Wallet Down</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#issue">Issue</a>
+      <a href="#data">Data</a>
+      <a href="#why">Why</a>
+      <a href="#act">What you can do</a>
+      <a href="#survey">Survey</a>
+    </nav>
+    <a class="btn primary small nav-cta" href="#survey">Take the survey</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <div class="hero" id="top">
+    <div class="wrap">
+      <div class="hero-inner">
+        <p class="eyebrow"><i aria-hidden="true"></i> YCIS Global Perspectives · Health and Wellbeing in a Digital World</p>
+        <h1>Level up,<br>wallet <span class="g">down.</span></h1>
+        <p class="lede">Microtransactions are designed to feel like nothing. Your allowance isn’t.</p>
+        <p class="sub">A student-built project on video-game overspending: what it costs Hong Kong students, why the games are built that way, and five ways to take your money back.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#survey">Take the 2-minute survey</a>
+          <a class="btn ghost" href="#data">See the data</a>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="mini-stat reveal">
+          <div class="val"><span data-count="57" data-suffix="%">0%</span></div>
+          <div class="cap">of Hong Kong secondary students have paid real money in a game</div>
+        </div>
+        <div class="mini-stat reveal">
+          <div class="val"><span data-count="19" data-suffix="%">0%</span></div>
+          <div class="cap">now spend more than HK$500 a month on in-game purchases</div>
+        </div>
+        <div class="mini-stat reveal">
+          <div class="val"><span data-count="9" data-suffix="%">0%</span></div>
+          <div class="cap">already meet the threshold researchers use for problem gambling</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap"><div class="divider"></div></div>
+
+  <!-- ISSUE -->
+  <section id="issue">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">01 — The issue</span>
+        <h2>A purchase you never feel</h2>
+        <p>Buying a game used to mean handing over cash once. That is not how games make money any more.</p>
+      </div>
+
+      <div class="issue-grid">
+        <div class="issue-copy reveal">
+          <p>Most free games earn in fragments: a skin here, a few gems there, a season pass every few months. Each payment is small enough to dismiss, and nothing physical changes hands, so there is no moment where the cost becomes real.</p>
+          <p>Teenagers are still learning to judge what a price actually costs them. The games are engineered to make that judgement as hard as possible — one tap, saved card, no receipt, no leaving the room.</p>
+          <blockquote class="pull">The problem is not that students are careless with money. It is that the spending is built to be invisible.</blockquote>
+          <p>Our project asks one question: if nobody can see the total, how would a student ever notice it?</p>
+        </div>
+
+        <aside class="case-card reveal" aria-label="Case reported by researchers">
+          <span class="tag">What it can become</span>
+          <p>A 27-year-old spent HK$80,000–90,000 on loot boxes, and borrowed from finance companies to keep going.</p>
+          <p>A 16-year-old’s requests climbed from about HK$100 to nearly HK$1,000 at a time, until his parents stopped paying and he had a panic attack.</p>
+          <p class="source">Cases reported alongside the 2024–25 Hong Kong study (星島日報, March 2026).</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA -->
+  <section id="data">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">02 — The evidence</span>
+        <h2>792 Hong Kong students, one clear pattern</h2>
+        <p>These are local numbers, not a foreign case study. The researchers surveyed secondary students across Hong Kong in 2024–25.</p>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card reveal">
+          <div class="num"><span data-count="71" data-suffix="%">0%</span></div>
+          <div class="lbl">have met virtual loot boxes</div>
+          <div class="note">Loot boxes are paid random draws — “gacha”, “mystery boxes”, “packs”.</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="num"><span data-count="57" data-suffix="%">0%</span></div>
+          <div class="lbl">have paid real money to open them</div>
+          <div class="note">Not free-to-play any more: free to start, paid to continue.</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="num">HK$<span data-count="500">0</span></div>
+          <div class="lbl">a month, paid by 19% of students</div>
+          <div class="note">That is about HK$6,000 a year from pocket money.</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="num"><span data-count="9" data-suffix="%">0%</span></div>
+          <div class="lbl">score at “problem gambling” level</div>
+          <div class="note">Researchers used a clinical screening tool, not a school quiz.</div>
+        </div>
+      </div>
+
+      <div class="chart reveal">
+        <h3>What the same students reported about their lives</h3>
+
+        <div class="chart-row">
+          <div class="chart-label"><span>Sometimes want to hide at home all day</span><span class="mono">56%</span></div>
+          <div class="chart-track"><div class="bar-fill" style="--w:56%"></div></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label"><span>Deliberately avoid social activities</span><span class="mono">35%</span></div>
+          <div class="chart-track"><div class="bar-fill" style="--w:35%"></div></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label"><span>Of those spending above HK$500 a month: notably higher rates of suicidal thoughts, self-harm and suicide attempts</span><span class="mono">↑</span></div>
+          <div class="chart-track"><div class="bar-fill" style="--w:100%"></div></div>
+        </div>
+
+        <p class="chart-src">Source: 青亮中心 &amp; The University of Hong Kong, Department of Social Work and Social Administration, 792 secondary students, surveyed 2024–25.</p>
+      </div>
+
+      <div class="council-strip">
+        <div class="council-item reveal"><strong>11</strong><span>free mobile games examined by the Consumer Council</span></div>
+        <div class="council-item reveal"><strong>9</strong><span>paid a bonus on your <em>first</em> purchase</span></div>
+        <div class="council-item reveal"><strong>4</strong><span>did not publish their loot-box odds at all</span></div>
+        <div class="council-item reveal"><strong>&lt;1%</strong><span>chance of the rarest item in 5 of the games that did</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">03 — Why it happens</span>
+        <h2>Six designs doing the work</h2>
+        <p>None of this is an accident. Each pattern below is a documented technique, and each one targets the moment you decide not to spend.</p>
+      </div>
+
+      <div class="why-grid">
+        <article class="why-card reveal">
+          <span class="idx">01</span>
+          <h3>Loot boxes and hidden odds</h3>
+          <p>A 1% drop rate means, on average, 100 pulls for the item you want. Some games do not publish the number at all.</p>
+          <span class="does"><b>What it does:</b> turns a price into a gamble, so nobody can work out the real cost up front.</span>
+        </article>
+        <article class="why-card reveal">
+          <span class="idx">02</span>
+          <h3>First-purchase rewards</h3>
+          <p>Nine of the eleven games doubled or boosted your first purchase. The first one is there to make the second one feel normal.</p>
+          <span class="does"><b>What it does:</b> converts a one-off decision into a habit.</span>
+        </article>
+        <article class="why-card reveal">
+          <span class="idx">03</span>
+          <h3>Limited-time offers</h3>
+          <p>“Only 3 hours left” and “limited stock” make waiting feel like losing, even when the same skin returns next month.</p>
+          <span class="does"><b>What it does:</b> replaces thinking time with urgency.</span>
+        </article>
+        <article class="why-card reveal">
+          <span class="idx">04</span>
+          <h3>VIP tiers and subscriptions</h3>
+          <p>Auto-renewing passes and VIP levels turn spending into status — and the monthly charge becomes background noise.</p>
+          <span class="does"><b>What it does:</b> makes spending tied to identity, not to want.</span>
+        </article>
+        <article class="why-card reveal">
+          <span class="idx">05</span>
+          <h3>One-tap purchasing</h3>
+          <p>A saved card removes the ten seconds where you would normally change your mind.</p>
+          <span class="does"><b>What it does:</b> deletes the moment of doubt.</span>
+        </article>
+        <article class="why-card reveal">
+          <span class="idx">06</span>
+          <h3>Permanent promotion</h3>
+          <p>Pop-ups on login, on the home screen, while files download. There is no quiet part of the game.</p>
+          <span class="does"><b>What it does:</b> makes not spending an active choice.</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- WELLBEING -->
+  <section id="wellbeing">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">04 — Health and wellbeing</span>
+        <h2>The cost that never shows on a receipt</h2>
+        <p>This is the part of the topic that matters most, and the part least talked about.</p>
+      </div>
+
+      <div class="well-grid">
+        <div class="well-card reveal">
+          <div class="num"><span data-count="56" data-suffix="%">0%</span></div>
+          <p>of students in the survey said they sometimes want to hide at home all day.</p>
+        </div>
+        <div class="well-card reveal">
+          <div class="num"><span data-count="35" data-suffix="%">0%</span></div>
+          <p>said they deliberately avoid social activities.</p>
+        </div>
+      </div>
+
+      <p class="reveal" style="max-width:70ch;color:#c7d3e6">Spending above HK$500 a month was associated with notably higher rates of suicidal thoughts, self-harm and suicide attempts. Researchers connected part of this to using games as an escape from stress — which is why they describe the issue as a public health question, not a shopping habit.</p>
+
+      <div class="callout reveal" role="note" style="margin-top:1.4rem">
+        <div class="icon" aria-hidden="true">i</div>
+        <p>If in-game spending is affecting your sleep, your mood or your friendships, tell a parent, a teacher or the <strong>school counsellor</strong>. This site is a student awareness project, not a counselling service.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT -->
+  <section id="act">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">05 — What you can do</span>
+        <h2>Five things, all free</h2>
+        <p>None of these require quitting your favourite game. They require one decision made in advance, instead of one made at 11pm.</p>
+      </div>
+
+      <div class="act-layout">
+        <div class="reveal">
+          <div class="method">
+            <div class="n">1</div>
+            <div><h3>Check the odds before you pay</h3><p>If a game will not tell you the drop rate, that is your answer. If it will, do the maths: 1% means 100 pulls on average.</p></div>
+          </div>
+          <div class="method">
+            <div class="n">2</div>
+            <div><h3>Set a monthly budget — a number, not a feeling</h3><p>Write it down before the month starts. “A bit” is not a budget; HK$150 is.</p></div>
+          </div>
+          <div class="method">
+            <div class="n">3</div>
+            <div><h3>Delete the saved card</h3><p>Typing your details in again is the cheapest self-control you will ever buy. Most impulse purchases die in those ten seconds.</p></div>
+          </div>
+          <div class="method">
+            <div class="n">4</div>
+            <div><h3>Use the 24-hour rule</h3><p>Want it now? Want it tomorrow at the same price? Then it can wait 24 hours. Limited-time pressure is exactly what this rule defeats.</p></div>
+          </div>
+          <div class="method">
+            <div class="n">5</div>
+            <div><h3>Track seven days</h3><p>Every purchase, the amount, and what was happening just before. The pattern shows up faster than you would expect.</p></div>
+          </div>
+        </div>
+
+        <div class="calc reveal">
+          <h3>What is it actually costing you?</h3>
+          <p class="hint">Two numbers. Nothing is stored, nothing is sent anywhere.</p>
+
+          <div class="field">
+            <label for="allowance">Monthly allowance or income (HK$)</label>
+            <div class="input-wrap"><span>HK$</span><input id="allowance" type="number" inputmode="numeric" min="0" step="10" placeholder="2000" /></div>
+          </div>
+          <div class="field">
+            <label for="spend">Monthly spending in games (HK$)</label>
+            <div class="input-wrap"><span>HK$</span><input id="spend" type="number" inputmode="numeric" min="0" step="10" placeholder="500" /></div>
+          </div>
+
+          <div class="calc-out" aria-live="polite">
+            <div class="big" id="pct">—</div>
+            <div class="big-label">of your allowance, spent in-game</div>
+            <div class="verdict" id="verdict" data-level="">Enter both numbers to see where you stand.</div>
+            <ul class="equiv" id="equiv" hidden>
+              <li><span>Over a year</span><b id="yearly">—</b></li>
+              <li><span>School lunches (HK$40 each)</span><b id="lunches">—</b></li>
+              <li><span>Bubble teas (HK$28 each)</span><b id="bubbletea">—</b></li>
+              <li><span>Cinema tickets (HK$85 each)</span><b id="cinema">—</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pledge reveal" style="margin-top:2rem">
+        <div class="pledge-head">
+          <h3>Try it for one week</h3>
+          <span class="count" id="pledgeCount">0 / 5</span>
+        </div>
+        <label class="check"><input type="checkbox" data-pledge="1" /><span>I will check the odds before my next in-game purchase.</span></label>
+        <label class="check"><input type="checkbox" data-pledge="2" /><span>I will set a monthly in-game budget, in actual dollars.</span></label>
+        <label class="check"><input type="checkbox" data-pledge="3" /><span>I will remove my saved card details from the game.</span></label>
+        <label class="check"><input type="checkbox" data-pledge="4" /><span>I will use the 24-hour rule on anything non-essential.</span></label>
+        <label class="check"><input type="checkbox" data-pledge="5" /><span>I will track what I spend for seven days.</span></label>
+        <p class="micro">Your ticks stay in this browser only — we cannot see them, and nothing is collected.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SURVEY -->
+  <section id="survey">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">06 — Our survey</span>
+        <h2>Two minutes, before and after</h2>
+        <p>We are measuring whether this project changes what students understand and how they intend to spend. One short survey before you explore the site, and the same one afterwards.</p>
+      </div>
+
+      <div class="survey-grid">
+        <article class="survey-card reveal">
+          <span class="step">Part 1 · before</span>
+          <h3>Before you look around</h3>
+          <p>Five questions on what you already think about in-game spending. There are no right or wrong answers — one is a guess, and nobody expects you to know it.</p>
+          <!-- Replace the href below with your Part 1 Google Form link -->
+          <a class="btn primary js-form" href="#" data-form="part 1">Open Part 1</a>
+        </article>
+
+        <article class="survey-card reveal">
+          <span class="step">Part 2 · after</span>
+          <h3>After you’ve read the site</h3>
+          <p>The same five questions, plus what you made of the project. Please answer as you feel now, not as you answered before.</p>
+          <!-- Replace the href below with your Part 2 Google Form link -->
+          <a class="btn ghost js-form" href="#" data-form="part 2">Open Part 2</a>
+        </article>
+      </div>
+      <p class="micro form-note" id="formNote" hidden></p>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section id="sources" class="sources">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">07 — Sources</span>
+        <h2>Where the numbers come from</h2>
+      </div>
+      <ol class="reveal">
+        <li>青亮中心 &amp; The University of Hong Kong, Department of Social Work and Social Administration. Study of virtual loot boxes among 792 Hong Kong secondary students, 2024–25. Reported by <a href="https://www.singtao.ca/7442533/2026-03-12/news-%E8%99%9B%E6%93%AC%E7%9B%B2%E7%9B%92%EF%B8%B1%E7%A0%94%E7%A9%B6%EF%BC%9A%E4%B8%83%E6%88%90%E5%8F%97%E8%A8%AA%E9%9D%92%E5%B0%91%E5%B9%B4%E6%9B%BE%E6%8A%BD%E5%8D%A1+%E6%9C%89%E7%A4%BE%E6%9C%83%E6%96%B0%E9%AE%AE%E4%BA%BA%E5%80%9F%E3%80%8C%E8%B2%A1%E4%BB%94%E3%80%8D%E8%AA%B2%E9%87%91/" target="_blank" rel="noopener">星島日報, 12 March 2026</a>.</li>
+        <li>Consumer Council (Hong Kong). “Be Cautious of Promotional Tactics Leading to Addiction to In-Game Purchase on Mobile Games.” <a href="https://www.consumer.org.hk/en/press-release/531-mobile-game-in-app-purchase" target="_blank" rel="noopener">CHOICE #531, January 2021</a>.</li>
+        <li>Hong Kong Family Welfare Society. Financial counselling on youth overspending and in-game purchases, <a href="https://www.hkfws.org.hk/news/media-links/20241030-etnet" target="_blank" rel="noopener">October 2024</a>.</li>
+      </ol>
+      <p class="note">Figures are reproduced as published. Where a figure is described in words (“notably higher”), the source gives no single percentage; we have not invented one. Our own survey results are separate from these sources and will be reported by Adam, Harvey and Wesley.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div>
+      <div class="foot-brand"><span class="brand-dot" aria-hidden="true"></span> Level Up, Wallet Down</div>
+      <p class="fine">A Global Perspectives project by Adam, Harvey and Wesley at YCIS. Topic: Health and Wellbeing in a Digital World.</p>
+    </div>
+    <div class="fine" style="text-align:right">
+      <div id="year">2026</div>
+      <div>Built to be read, not to sell you anything.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- reveal on scroll ---------- */
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var revealEls = document.querySelectorAll(".reveal");
+
+  if (!reduce && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  /* ---------- chart bars ---------- */
+  var chartRows = document.querySelectorAll(".chart-row");
+  if ("IntersectionObserver" in window) {
+    var ioChart = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          ioChart.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.35 });
+    chartRows.forEach(function (r) { ioChart.observe(r); });
+  } else {
+    chartRows.forEach(function (r) { r.classList.add("in"); });
+  }
+
+  /* ---------- count up ---------- */
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function countUp(el) {
+    var target = parseFloat(el.getAttribute("data-count"));
+    var suffix = el.getAttribute("data-suffix") || "";
+    if (isNaN(target)) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.textContent = target + suffix;
+      return;
+    }
+
+    var duration = 1100;
+    var start = null;
+
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      var value = Math.round(target * easeOutCubic(p));
+      el.textContent = value + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  var counters = document.querySelectorAll("[data-count]");
+  if ("IntersectionObserver" in window) {
+    var ioCount = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          countUp(e.target);
+          ioCount.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (c) { ioCount.observe(c); });
+  } else {
+    counters.forEach(countUp);
+  }
+
+  /* ---------- spending calculator ---------- */
+  var allowanceEl = document.getElementById("allowance");
+  var spendEl = document.getElementById("spend");
+  var pctEl = document.getElementById("pct");
+  var verdictEl = document.getElementById("verdict");
+  var equivEl = document.getElementById("equiv");
+
+  var hkd = new Intl.NumberFormat("en-HK", { maximumFractionDigits: 0 });
+
+  function money(n) { return "HK$" + hkd.format(Math.round(n)); }
+
+  function updateCalc() {
+    if (!allowanceEl || !spendEl) return;
+
+    var allowance = parseFloat(allowanceEl.value);
+    var spend = parseFloat(spendEl.value);
+
+    if (isNaN(allowance) || isNaN(spend) || allowance <= 0 || spend < 0) {
+      pctEl.textContent = "—";
+      verdictEl.textContent = "Enter both numbers to see where you stand.";
+      verdictEl.setAttribute("data-level", "");
+      equivEl.hidden = true;
+      return;
+    }
+
+    var pct = (spend / allowance) * 100;
+    var rounded = Math.round(pct);
+
+    pctEl.textContent = rounded + "%";
+
+    var level, message;
+    if (spend === 0) {
+      level = "ok";
+      message = "Nothing spent this month. Keep that plate spinning — or set a cap before the next update drops.";
+    } else if (pct < 10) {
+      level = "ok";
+      message = "Low. You are inside a healthy range, though a written budget still beats a good month.";
+    } else if (pct < 25) {
+      level = "watch";
+      message = "Worth watching. This is the range where “it’s only a few dollars” quietly starts to add up.";
+    } else if (pct < 50) {
+      level = "high";
+      message = "High. A quarter or more of your allowance is in-game spending. Give yourself a number before next month starts.";
+    } else {
+      level = "high";
+      message = "Too high. Over half your allowance is in-game spending. Change the defaults today: remove the saved card and set a cap.";
+    }
+
+    verdictEl.textContent = message;
+    verdictEl.setAttribute("data-level", level);
+
+    document.getElementById("yearly").textContent = money(spend * 12);
+    document.getElementById("lunches").textContent = Math.floor(spend / 40) + " lunches";
+    document.getElementById("bubbletea").textContent = Math.floor(spend / 28) + " drinks";
+    document.getElementById("cinema").textContent = Math.floor(spend / 85) + " tickets";
+    equivEl.hidden = false;
+  }
+
+  [allowanceEl, spendEl].forEach(function (el) {
+    if (el) el.addEventListener("input", updateCalc);
+  });
+
+  /* ---------- pledge checkboxes ---------- */
+  var KEY = "gp-pledge-v1";
+  var boxes = Array.prototype.slice.call(document.querySelectorAll("[data-pledge]"));
+  var countEl = document.getElementById("pledgeCount");
+
+  function savedState() {
+    try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+    catch (err) { return []; }
+  }
+
+  function paintCount() {
+    if (!countEl) return;
+    var on = boxes.filter(function (b) { return b.checked; }).length;
+    countEl.textContent = on + " / " + boxes.length;
+  }
+
+  function persist() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(
+        boxes.filter(function (b) { return b.checked; }).map(function (b) { return b.getAttribute("data-pledge"); })
+      ));
+    } catch (err) { /* private mode — the checkboxes still work on screen */ }
+  }
+
+  if (boxes.length) {
+    var saved = savedState();
+    boxes.forEach(function (b) {
+      if (saved.indexOf(b.getAttribute("data-pledge")) !== -1) b.checked = true;
+      b.addEventListener("change", function () { persist(); paintCount(); });
+    });
+    paintCount();
+  }
+
+  /* ---------- survey placeholder links ---------- */
+  var formNote = document.getElementById("formNote");
+  document.querySelectorAll(".js-form").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      var href = link.getAttribute("href");
+      if (!href || href === "#") {
+        event.preventDefault();
+        if (formNote) {
+          formNote.hidden = false;
+          formNote.textContent = "Our " + link.getAttribute("data-form") + " form is being finalised and will open from here on launch day. Thank you for volunteering.";
+        }
+      }
+    });
+  });
+
+  /* ---------- year ---------- */
+  var yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
